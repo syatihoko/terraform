@@ -13,7 +13,7 @@ locals {
     //stage = "t3.nano"
     stage = 1
     prod = 0
-    default = 2
+    default = 0
   }
 }
 
