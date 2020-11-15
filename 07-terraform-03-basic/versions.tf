@@ -7,17 +7,17 @@ terraform {
   }
 }
 
-
-#s3_bucket для хранения backend s3
-resource "aws_s3_bucket" "kaa-terraform-states" {
-bucket = "kaa-terraform-states"
-acl = "private"
-
-tags = {
-    Name = "Terraform-states"
-    Environment = "Test"
-  }
-}
+//
+//#s3_bucket для хранения backend s3
+//resource "aws_s3_bucket" "kaa-terraform-states" {
+//bucket = "kaa-terraform-states"
+//acl = "private"
+//
+//tags = {
+//    Name = "Terraform-states"
+//    Environment = "Test"
+//  }
+//}
 
 
 terraform {
