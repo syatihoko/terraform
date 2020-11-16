@@ -11,7 +11,7 @@ locals {
 locals {
   ubuntu_instance_workspace_count_map = {
     //stage = "t3.nano"
-    stage = 1
+    stage = 2
     prod = 1
     default = 0
   }
