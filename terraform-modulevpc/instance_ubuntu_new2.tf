@@ -1,15 +1,36 @@
-//// создаем  Instance ubuntu
-resource "aws_instance" "ubuntu_new" {
-  count = local.ubuntu_instance_workspace_count_map[terraform.workspace]
-provider = aws
-ami = data.aws_ami.aws_ubuntu.id
-//instance_type = "t2.micro"
-//Значение типа от текущего workspace
-instance_type = local.ubuntu_instance_workspace_type_map[terraform.workspace]
+locals {
+  ubuntu_instance_names_map = {
+    //stage = "t3.nano"
+    ubuntu_new2_1 = "PC_For_Test"
+    ubuntu_new2_2 = "PC_For_Use"
+  }
+}
+
+
+//// создаем  Instance ubuntu 2 через for_each
+resource "aws_instance" "ubuntu_new2" {
+
+  //Создавать ресурсы до удаления
+  lifecycle {
+    create_before_destroy = true
+  }
+
+
+  // Для каждлого значения в local.ubuntu_instance_names_map
+  //for_each = local.ubuntu_instance_names_map
+  //Сейчас устанавливаю = 0, чтобы не создавались машины
+  count = 0
+
+  provider = aws
+  ami = data.aws_ami.aws_ubuntu.id
+  //instance_type = "t2.micro"
+  //Значение типа от текущего workspace
+  instance_type = local.ubuntu_instance_workspace_type_map[terraform.workspace]
 tags = {
-//Для определение имени добавляем порядковый номер Instance
-"Name" = "test_ubuntu_${count.index}"
-"GroupName" = local.ubuntu_instance_workspace_group_map[terraform.workspace]
+//Для определение имени берем значение ключа из ubuntu_instance_names_map
+//"Name" = each.key
+//Для определение имени берем значение value из ubuntu_instance_names_map
+//"GroupName" = each.value
 }
 
 //внешний IP нужен
@@ -47,15 +68,6 @@ credit_specification {
 cpu_credits = "standard"
 
 }
-
-// владение экземпляром (если экземпляр работает в VPC). Экземпляр с арендой выделенных запусков на однопользовательском оборудовании.
-volume_tags = {}
-//  vpc_security_group_ids       = [   #The associated security groups in non-default VPC
-//         local.ubuntu_instance_workspace_sgvpc__map[terraform.workspace],
-//  ]
-
-
-
 
 //Параметры Volume
 root_block_device {

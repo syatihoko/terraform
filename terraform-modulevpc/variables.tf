@@ -11,7 +11,7 @@ locals {
 locals {
   ubuntu_instance_workspace_count_map = {
     //stage = "t3.nano"
-    stage = 2
+    stage = 0
     prod = 1
     default = 0
   }
@@ -47,8 +47,8 @@ locals {
 }
 
 
-variable "AWS_ACCESS_KEY_ID" {}
-variable "AWS_SECRET_ACCESS_KEY" {}
+#variable "AWS_ACCESS_KEY_ID" {}
+#variable "AWS_SECRET_ACCESS_KEY" {}
 //
 
 

@@ -20,6 +20,7 @@ terraform {
 //}
 
 
+//Удаленный state
 terraform {
   backend "s3" {
     bucket = "kaa-terraform-states"
