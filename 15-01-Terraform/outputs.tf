@@ -1,4 +1,25 @@
-//В файл outputs.tf поместить блоки output с данными об используемых в данный момент:
+
+
+
+
+
+########## PRIVATE SUBNET ##########
+//output "aws_subnet_private_subnet"  {
+//  value = aws_subnet.private.cidr_block
+//}
+
+
+//########## PRIVATE NAT GATEWAY ##########
+//output "aws_nat_gateway_private_id" {   # просто имя
+//  value = [aws_nat_gateway.private_nat.id]
+//}
+//
+//########## PRIVATE ROUTE TABLE ##########
+//output "aws_route_table_private_id"  {
+//  value = [aws_route_table.private_route.id]
+//}
+//
+////В файл outputs.tf поместить блоки output с данными об используемых в данный момент:
 ////AWS account ID,
 ////AWS user ID,
 ////AWS регион, который используется в данный момент,
