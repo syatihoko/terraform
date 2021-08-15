@@ -32,11 +32,11 @@ resource "aws_ec2_client_vpn_endpoint" "kaa_vpn_endpoint" {
 
 resource "aws_ec2_client_vpn_network_association" "vpn_to_private_association" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.kaa_vpn_endpoint.id
-  subnet_id              = aws_subnet.private_subnet.id
+  subnet_id              = aws_subnet.private.id
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "default_vpn_authorization_rule" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.kaa_vpn_endpoint.id
-  target_network_cidr    = aws_subnet.private_subnet.cidr_block
+  target_network_cidr    = aws_subnet.private.cidr_block
   authorize_all_groups   = true
 }

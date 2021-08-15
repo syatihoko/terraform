@@ -5,7 +5,7 @@
 
   ########## PUBLIC SUBNET ##########
   //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
-  resource "aws_subnet" "public_subnet" {
+  resource "aws_subnet" "public" {
     vpc_id     = module.vpc.vpc_id
     cidr_block = "172.31.32.0/19"
 
@@ -43,7 +43,7 @@
 //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association
 //Предоставляет ресурс для создания связи между таблицей маршрутов и подсетью или таблицей маршрутов и интернет-шлюзом или виртуальным частным шлюзом.
 resource "aws_route_table_association" "public_association" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public_route.id
 //  tags = {
 //    Name = "public_route_assoc"
@@ -58,7 +58,7 @@ resource "aws_route_table_association" "public_association" {
 //  private_subnets = ["172.31.96.0/19"]
 
 ########## PRIVATE SUBNET ##########
-  resource "aws_subnet" "private_subnet" {
+  resource "aws_subnet" "private" {
     vpc_id     = module.vpc.vpc_id
     cidr_block = "172.31.96.0/19"
 
@@ -67,16 +67,28 @@ resource "aws_route_table_association" "public_association" {
     }
 }
 
+//Elastic IP addresses (необязательно)
+//https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip
+  resource "aws_eip" "ip_for_nat" {
+  vpc      = true
+}
 
 ########## PRIVATE NAT GATEWAY ##########
 //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway
-  resource "aws_nat_gateway" "private_nat" {
-    connectivity_type = "private"
-    subnet_id         = aws_subnet.private_subnet.id
+  resource "aws_nat_gateway" "private_nat_gateway" {
+    //connectivity_type = "private"
+    //Allocation ID эластичного IP-адреса для шлюза. Required for connectivity_type of public.
+    allocation_id = aws_eip.ip_for_nat.id
+    //Subnet ID в подсети, в которой следует разместить шлюз.
+    //subnet_id         = aws_subnet.private.id
+    // ID подсети подсети, в которой нужно разместить шлюз.
+    subnet_id         = aws_subnet.public.id  //?????????
 
     tags = {
       Name = "NAT gw private"
     }
+    #Зависимость от Шлюза публичной сети
+      depends_on = [aws_internet_gateway.public_gw]
 }
 
 
@@ -87,7 +99,7 @@ resource "aws_route_table_association" "public_association" {
       vpc_id = module.vpc.vpc_id
       route {
           cidr_block = "0.0.0.0/0"
-          nat_gateway_id = aws_nat_gateway.private_nat.id
+          nat_gateway_id = aws_nat_gateway.private_nat_gateway.id
         }
       tags = {
         Name = "private route NAT"
@@ -98,7 +110,7 @@ resource "aws_route_table_association" "public_association" {
 //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association
 //Предоставляет ресурс для создания связи между таблицей маршрутов и подсетью или таблицей маршрутов и интернет-шлюзом или виртуальным частным шлюзом.
 resource "aws_route_table_association" "private_association" {
-  subnet_id      = aws_subnet.private_subnet.id
+  subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private_route.id
 }
 
