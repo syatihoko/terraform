@@ -15,14 +15,14 @@
 //// #################### VPN. #######################
 resource "aws_ec2_client_vpn_endpoint" "kaa_vpn_endpoint" {
   description            = "terraform-clientvpn-endpoint"
-  //сертификат Сервера: "CertificateArn": "arn:aws:acm:eu-west-3:250629965860:certificate/1b6ef1fd-0cb7-4ce1-91e4-55240336abd4"
-  server_certificate_arn = "arn:aws:acm:eu-west-3:250629965860:certificate/1b6ef1fd-0cb7-4ce1-91e4-55240336abd4"
+  //сертификат Сервера: "CertificateArn": "arn:aws:acm:eu-west-3:835931830893:certificate/c4204212-27ff-48e0-ae0f-5b80c6a3c07a" Из Certificate Manager
+  server_certificate_arn = "arn:aws:acm:eu-west-3:835931830893:certificate/c4204212-27ff-48e0-ae0f-5b80c6a3c07a"
   client_cidr_block      = "10.0.0.0/16"
 
-  // сертификат Клиента:  "CertificateArn": "arn:aws:acm:eu-west-3:250629965860:certificate/3ec7ccb9-e31b-4525-ad16-23051cd75591"
+  // сертификат Клиента:  "CertificateArn": "	arn:aws:acm:eu-west-3:835931830893:certificate/14b3c188-81a9-4d74-882b-cf0e5eb97fad" из Certificate Manager
   authentication_options {
     type                       = "certificate-authentication"
-    root_certificate_chain_arn = "arn:aws:acm:eu-west-3:250629965860:certificate/3ec7ccb9-e31b-4525-ad16-23051cd75591"
+    root_certificate_chain_arn = "arn:aws:acm:eu-west-3:835931830893:certificate/14b3c188-81a9-4d74-882b-cf0e5eb97fad"
   }
 
   connection_log_options {
@@ -40,3 +40,6 @@ resource "aws_ec2_client_vpn_authorization_rule" "default_vpn_authorization_rule
   target_network_cidr    = aws_subnet.private.cidr_block
   authorize_all_groups   = true
 }
+
+#Подключение к приватной сети
+#ssh -i "151_new.pem" ec2-user172-31-125-60

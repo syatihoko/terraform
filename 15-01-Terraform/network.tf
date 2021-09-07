@@ -8,11 +8,23 @@
   resource "aws_subnet" "public" {
     vpc_id     = module.vpc.vpc_id
     cidr_block = "172.31.32.0/19"
+    availability_zone =  "eu-west-3a"
 
   tags = {
     Name = "public_subnet"
   }
 }
+
+  resource "aws_subnet" "public2" {
+    vpc_id     = module.vpc.vpc_id
+    cidr_block = "172.31.0.0/19"
+    availability_zone =  "eu-west-3b"
+
+  tags = {
+    Name = "public_subnet2"
+  }
+}
+
   ########## PUBLIC GATEWAY##########
   //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway
 
