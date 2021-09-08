@@ -6,23 +6,18 @@
 //Блок провайдеров
 //registry.terraform.io/providers/hashicorp/aws/latest/docs
 
-# provider "aws" {
-#   region = "eu-west-3"
-# }
+provider "aws" {
+  region = "eu-west-3"
+}
 
 
 //Создание bucket
 resource "aws_s3_bucket" "kaa_b" {
   bucket = "kaa-20210903"
-  acl    = "private"      //   !!!!!!!!!!!!!!!
+  acl    = "private"
 
   versioning {
-    //enabled = true
-    enabled = false
-  }
-
-    tags = {
-    Name    = "My bucket"
+    enabled = true
   }
 }
 
@@ -32,17 +27,15 @@ resource "aws_s3_bucket" "kaa_b" {
 resource "aws_s3_bucket_object" "kaa_foto" {
   //Имя сегмента, в который будет помещен файл. В качестве альтернативы можно указать ARN точки доступа S3.
   bucket = "kaa-20210903"
-  //Публичный доступ на чтение
-  acl    = "public-read"
   //Имя объекта, когда он находится в bucket.
-  key    = "kaa_foto.png"
+  key    = "kaa_foto.jpg"
   //(Optional, conflicts with content and content_base64) Path to a file that will be read and uploaded as raw bytes for the object content.
-  source = "files/foto.png"
+  source = "files/foto.jpg"
 
   # The filemd5() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
   # etag = "${md5(file("path/to/file"))}"
-  etag = filemd5("files/foto.png")
+  etag = filemd5("files/foto.jpg")
 }
 
 //Предоставляет подробную информацию о конкретном  S3 bucket.
